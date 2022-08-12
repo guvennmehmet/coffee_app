@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="20dp"
+    tools:context=".feature.coffeedetail.CoffeeDetailFragment">
+
+    <ImageView
+        android:id="@+id/coffeeImage"
+        android:layout_width="150dp"
+        android:layout_height="149dp"
+        android:src="@drawable/ic_launcher_background"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/coffeeNameText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@id/coffeeImage"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginStart="10dp" />
+
+    <ImageButton
+        android:id="@+id/favouriteButton"
+        android:layout_width="51dp"
+        android:layout_height="40dp"
+        android:background="@null"
+        app:srcCompat="@drawable/ic_baseline_star_outline_24"
+        app:tint="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Zorluk Derecesi"
+        app:layout_constraintStart_toEndOf="@id/coffeeImage"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/difficultyRatingBar"
+        />
+
+    <RatingBar
+        android:id="@+id/difficultyRatingBar"
+        android:layout_width="242dp"
+        android:layout_height="40dp"
+        android:isIndicator="true"
+        android:numStars="5"
+        android:scaleX=".6"
+        android:scaleY=".6"
+        android:stepSize="0.5"
+        app:layout_constraintStart_toEndOf="@id/coffeeImage"
+        app:layout_constraintBottom_toTopOf="@id/coffeeDescriptionText"
+        android:layout_marginBottom="20dp"
+        />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/sertlik"
+        app:layout_constraintStart_toEndOf="@id/coffeeImage"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/hardnessRatingBar"
+
+        />
+
+    <RatingBar
+        android:id="@+id/hardnessRatingBar"
+        android:layout_width="245dp"
+        android:layout_height="40dp"
+        android:isIndicator="true"
+        android:numStars="5"
+        android:scaleX=".6"
+        android:scaleY=".6"
+        android:stepSize="0.5"
+        app:layout_constraintStart_toEndOf="@id/coffeeImage"
+        app:layout_constraintBottom_toTopOf="@id/textView3"
+        />
+
+    <TextView
+        android:id="@+id/coffeeDescriptionText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/lorem"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/coffeeImage" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hazırlanış"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_marginTop="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/coffeeDescriptionText"
+
+        />
+
+    <TextView
+        android:id="@+id/preparationText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/lorem"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textView"
+        />
+
+
+
+
+
+
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
