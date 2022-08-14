@@ -32,16 +32,16 @@ class CoffeeAdapter (private val coffeeList:List<Coffee>, val listener: CoffeeCl
             favouriteButton = view.findViewById(R.id.favouriteButton)
 
             coffeeCard.setOnClickListener {
-                listener.coffeeOnClick(coffeeList[adapterPosition])
+                listener.coffeeOnClick(coffeeList[bindingAdapterPosition])
             }
 
             favouriteButton.setOnClickListener {
-                if (coffeeList[position].isFavorite) {
+                if (coffeeList[bindingAdapterPosition].isFavorite) {
                     favouriteButton.setImageDrawable(ContextCompat.getDrawable(view.context,R.drawable.ic_baseline_star_outline_24))
                 } else {
                     favouriteButton.setImageDrawable(ContextCompat.getDrawable(view.context,R.drawable.ic_baseline_star_24))
                 }
-                listener.changeFavorite(coffeeList[position])
+                listener.changeFavorite(coffeeList[bindingAdapterPosition])
             }
 
         }

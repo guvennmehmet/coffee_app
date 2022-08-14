@@ -13,6 +13,11 @@
     android:layout_height="match_parent"
     tools:context=".feature.coffeelist.CoffeeListFragment">
 
+    <ScrollView
+        android:id="@+id/scroll_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/coffee_rv"
         android:layout_width="match_parent"
@@ -21,6 +26,8 @@
         android:orientation="vertical"
         android:visibility="gone"
         />
+
+    </ScrollView>
 
     <TextView
         android:layout_width="match_parent"
@@ -42,4 +49,5 @@
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

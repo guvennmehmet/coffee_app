@@ -17,7 +17,7 @@ import javax.inject.Inject
 @HiltViewModel
 class CoffeeListViewModel @Inject constructor(
     private val repository: CoffeeRepository,
-    private val db: CoffeeDatabase.AppDatabase
+    private val db: CoffeeDatabase.AppDatabase,
     ): ViewModel(){
 
     val coffeeLiveData = MutableLiveData<List<Coffee>>()
