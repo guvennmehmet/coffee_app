@@ -5,34 +5,49 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.coffee_app.db.CoffeeDatabase
 import com.example.coffee_app.model.Coffee
 import com.example.coffee_app.repository.CoffeeRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.io.IOException
 import javax.inject.Inject
 
 @HiltViewModel
-class CoffeeListViewModel @Inject constructor(private val repository: CoffeeRepository):
-    ViewModel(){
+class CoffeeListViewModel @Inject constructor(
+    private val repository: CoffeeRepository,
+    private val db: CoffeeDatabase.AppDatabase
+    ): ViewModel(){
 
-    val _coffe = MutableLiveData<List<Coffee>>()
-
-    val coffee: LiveData<List<Coffee>>
-        get() = _coffe
+    val coffeeLiveData = MutableLiveData<List<Coffee>>()
+    val isOnline = MutableLiveData<Boolean>()
 
     init {
         getAllCoffee()
     }
 
-    private fun getAllCoffee() = viewModelScope.launch {
-        repository.getCoffee().let { response ->
-            if (response.isSuccessful) {
-                _coffe.postValue(response.body())
-            } else {
-                Log.e("myLog","error")
+    fun getAllCoffee() {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                repository.getCoffee().body()?.let {
+                    db.coffeeDao().insertList(it)
+                }
+                isOnline.postValue(true)
+            } catch (e: IOException) {
+                isOnline.postValue(false)
             }
+
+            coffeeLiveData.postValue(db.coffeeDao().getAll())
         }
     }
 
+    fun changeFavorite(coffee: Coffee) {
+        coffee.isFavorite = !coffee.isFavorite
+
+        viewModelScope.launch(Dispatchers.IO) {
+            db.coffeeDao().update(coffee)
+        }
+    }
 
 }

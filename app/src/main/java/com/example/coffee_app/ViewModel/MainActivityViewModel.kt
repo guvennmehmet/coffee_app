@@ -34,7 +34,6 @@ class MainActivityViewModel @Inject constructor(private val repository: CoffeeRe
         }
     }
 
-
 }
 
 

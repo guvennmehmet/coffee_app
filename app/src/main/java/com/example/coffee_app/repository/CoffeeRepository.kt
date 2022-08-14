@@ -5,6 +5,6 @@ import javax.inject.Inject
 
 class CoffeeRepository @Inject constructor(private val api:CoffeeAPI) {
 
-    suspend fun  getCoffee() = api.getAllCoffee()
+    suspend fun getCoffee() = api.getAllCoffee()
 
 }

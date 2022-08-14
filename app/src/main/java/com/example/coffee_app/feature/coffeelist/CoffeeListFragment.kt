@@ -11,10 +11,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.coffee_app.feature.MainActivity
 import com.example.coffee_app.databinding.FragmentCoffeeListBinding
 import com.example.coffee_app.model.Coffee
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import dagger.hilt.android.AndroidEntryPoint
 import java.lang.reflect.Type
+import kotlin.system.exitProcess
 
 @AndroidEntryPoint
 class CoffeeListFragment() : Fragment(), CoffeeClickListener {
@@ -29,30 +31,42 @@ class CoffeeListFragment() : Fragment(), CoffeeClickListener {
     ): View? {
 
         binding = FragmentCoffeeListBinding.inflate(inflater,container,false)
+
+        binding.swipeRefresh.setOnRefreshListener {
+            viewModel.getAllCoffee()
+            binding.swipeRefresh.isRefreshing = false
+        }
+
         adapter = CoffeeAdapter(listOf(),this)
-        viewModel.coffee.observe(viewLifecycleOwner ) {
+        viewModel.coffeeLiveData.observe(viewLifecycleOwner ) {
             binding.coffeeRv.layoutManager = LinearLayoutManager(requireContext())
-
-            val sharedPref = activity?.getSharedPreferences("favorite", Context.MODE_PRIVATE)
-            val favoriteCoffee = sharedPref?.getString("favoriteIDs", null)
-
-            val intListType: Type = object : TypeToken<List<Int>>() {}.type
-
-            var favoriteCoffeeIDs: List<Int> = listOf()
-
-            if(favoriteCoffee != null) {
-                favoriteCoffeeIDs = Gson().fromJson(favoriteCoffee, intListType)
-            }
-
-            for (item in it) {
-                if (favoriteCoffeeIDs.contains(item.id)) {
-                    item.isFavorite = true
-                }
-            }
-
             adapter = CoffeeAdapter(it,this)
             binding.coffeeRv.adapter = adapter
+
+            binding.loading.visibility = View.GONE
+            if (it.isEmpty()) {
+                binding.noInternet.visibility = View.VISIBLE
+                binding.coffeeRv.visibility = View.GONE
+            } else {
+                binding.noInternet.visibility = View.GONE
+                binding.coffeeRv.visibility = View.VISIBLE
+            }
         }
+
+        viewModel.isOnline.observe(viewLifecycleOwner) {
+            if(!it) {
+                MaterialAlertDialogBuilder(requireContext())
+                    .setMessage("İnternet yok.")
+                    .setNegativeButton("TEKRAR DENE") { _, _ ->
+                        viewModel.getAllCoffee()
+                    }
+                    .setPositiveButton("ÇIKIŞ YAP") {_, _ ->
+                        exitProcess(0)
+                    }
+                    .show()
+            }
+        }
+
         return binding.root
     }
 
@@ -61,30 +75,6 @@ class CoffeeListFragment() : Fragment(), CoffeeClickListener {
     }
 
     override fun changeFavorite(coffee: Coffee) {
-        val preferences = activity?.getSharedPreferences("favorite", Context.MODE_PRIVATE)
-        val editor = preferences?.edit()
-
-        val currentFavoriteList = preferences?.getString("favoriteIDs", null)
-        val intListType: Type = object : TypeToken<ArrayList<Int>>() {}.type
-
-        var favoriteCoffeeIDs: ArrayList<Int> = arrayListOf()
-
-        if(currentFavoriteList != null) {
-            favoriteCoffeeIDs = Gson().fromJson(currentFavoriteList, intListType)
-        }
-
-        if (!coffee.isFavorite) {
-            favoriteCoffeeIDs.add(coffee.id)
-            coffee.isFavorite = true
-        } else {
-            favoriteCoffeeIDs.remove(coffee.id)
-            coffee.isFavorite = false
-        }
-
-
-        val json = Gson().toJson(favoriteCoffeeIDs)
-
-        editor?.putString("favoriteIDs", json)
-        editor?.commit()
+        viewModel.changeFavorite(coffee)
     }
 }
